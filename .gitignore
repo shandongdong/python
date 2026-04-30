@@ -131,3 +131,8 @@ dmypy.json
 *.class
 .idea
 test2.py
+
+
+
+# 个人特定的习惯
+CLAUDE.local.md

@@ -1,0 +1,7 @@
+{
+    "editor.inlayHints.enabled": "off",
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.inlayHints.functionReturnTypes": false,
+    "python.analysis.inlayHints.callArgumentNames": false,
+    "python.analysis.inlayHints.pytestParameters": false
+}
