@@ -212,3 +212,102 @@ by_salary = sorted(employees, key=lambda e: e["salary"], reverse=True)
 for e in by_salary:
     print(f"{e['name']} - {e['salary']}")
 # 王五-22000, 李四-18000, 赵六-16000, 张三-15000, 钱七-15000
+
+
+
+# --- Day 03 继续 ---
+"""
+  1. 列表推导式（List Comprehension）  
+   === 基本语法：[表达式 for 变量 in 可迭代对象] ===
+"""
+
+  # ❌ Java 思维：用 for 循环
+squares = []
+for x in range(10):
+    squares.append(x ** 2)  # ** 是 Python 的 幂运算 （求乘方）：x ** 2 表示 x 的平方
+    print(x, x ** 2)
+print(squares)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+
+# ✅ 列表推导式：一行搞定
+squares = [(x + 1)  for x in range(10)]
+print(squares)  # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# 带条件过滤：只有当 x > 5 时，才会被添加到列表中
+squares = [x + 1  for x in range(10) if x > 5]
+print(squares)  # [6, 7, 8, 9, 10]
+
+# 带条件转换（if-else）：
+# 注意！if-else 放在 for 前面，不是后面
+# 语法：[A if 条件 else B for 变量 in 可迭代对象]
+squares = [ x if x > 5 else 0 for x in range(10)]
+print(squares)  # [0, 0, 0, 0, 0, 0, 6, 7, 8, 9]
+# 带条件过滤：只有当 x < 8 时，才会被添加到列表中
+squares = [ x if x > 5 else 0 for x in range(10) if x < 8]
+print(squares)  # [0, 0, 0, 0, 0, 0, 6, 7]
+
+# 容易搞混的点：
+# [x for x in nums if x > 0]       ← 过滤：扔掉不满足条件的
+# [x if x > 0 else 0 for x in nums] ← 转换：每个元素都保留，但值可能变
+
+  # === 字典推导式：{key: value for ...} ===
+
+names = ["张三", "李四", "王五"]
+scores = [85, 92, 78]
+
+# 构建字典
+score_dict = {name: score for (name, score) in zip(names, scores)}
+# {'张三': 85, '李四': 92, '王五': 78}
+# 效果和 dict(zip(names, scores)) 一样，但推导式可以加条件
+print(score_dict) # {'张三': 85, '李四': 92, '王五': 78}
+
+# 只要90分以上的
+high_scores = {name: score for name, score in zip(names, scores) if score >= 90}
+print(high_scores) # {'李四': 92}
+
+# === 集合推导式：{表达式 for ...} ===
+
+nums2 = [1, 2, 2, 3, 3, 3, 4]
+unique_squares2 = {x ** 2 for x in nums2}    # {...} 是 集合推导式 ，产出的是 set （集合），而集合天生就去重。
+print(unique_squares2) # {16, 1, 4, 9}. 集合元素是无序的，所以打印结果可能和预期不同。
+
+nums3 = [1, 2, 2, 3, 3, 3, 4]
+unique_squares3 = [x ** 2 for x in nums3]    # {...} 是 列表推导式 ，产出的是 list （列表），而列表天生就不去重。
+print(unique_squares3) # [1, 4, 4, 9, 9, 9, 16]. 列表元素是有序的，所以打印结果和预期相同。
+
+# 怎么区分字典推导式和集合推导式？ 看有没有冒号 :
+[x ** 2 for x in nums2]   # [] → 列表推导式，不去重，有序    # [1, 4, 4, 9, 9, 9, 16]
+{x ** 2 for x in nums2}   # {} → 集合推导式，自动去重，无序  # {16, 1, 4, 9}
+{x: x**2 for x in nums2}  # {:} → 字典推导式，key去重      # {1: 1, 2: 4, 3: 9, 4: 16}
+""" 推导过程：
+    1 → 1² = 1    加入集合 {1}
+    2 → 2² = 4    加入集合 {1, 4}
+    2 → 2² = 4    已存在，跳过
+    3 → 3² = 9    加入集合 {1, 4, 9}
+    3 → 3² = 9    已存在，跳过
+    3 → 3² = 9    已存在，跳过
+    4 → 4² = 16   加入集合 {1, 4, 9, 16}
+"""
+
+# 3. 生成器表达式 vs 列表推导式
+
+# Why：列表推导式会一次性把所有结果放到内存里。如果数据量很大（比如一百万行日志），内存会爆。生成器表达式是"懒计算"的，每次只算一个值。
+
+# 列表推导式：用 []，立刻计算所有结果，存在内存里
+squares_list = [x ** 2 for x in range(1000000)]   # 占内存！
+
+# 生成器表达式：用 ()，不立刻计算，遍历时才一个一个算
+squares_gen = (x ** 2 for x in range(1000000))     # 几乎不占内存
+
+# 生成器只能遍历一次
+for s in squares_gen:
+    pass   # 遍历完了
+
+for s in squares_gen:
+    pass   # 第二次遍历什么都拿不到！
+
+# Java 对比：生成器 ≈ Java Stream，都是懒求值、只能消费一次
+
+words = ["Hello", "WORLD", "Python", "java", "Flask", "SPRING"]
+lower = [(word.lower(), len(word)) for word in words]
+print(lower)  # ['hello', 'world', 'python', 'java', 'flask', 'spring']
+print(dict(lower))  # {'hello': 5, 'world': 5, 'python': 6, 'java': 4, 'flask': 5, 'spring': 6}
