@@ -1,0 +1,1 @@
+测试在test分支上创建一个文件，然后通过pull request 的方式请求合并到master分支，master同意这个pull request请求之后，那么test分支上的文件将被合并到master分支上。
