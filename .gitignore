@@ -136,3 +136,8 @@ test2.py
 
 # 个人特定的习惯
 CLAUDE.local.md
+
+
+#IDE 相关
+.idea/
+.qoder/
